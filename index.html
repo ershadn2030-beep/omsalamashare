@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إشعار درجات الفصل الدراسي - مدرسة أم سلمة رضي الله عنها الخيرية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@700;800&family=Amiri:wght@400;700&family=Cairo:wght@700;800&family=Noto+Naskh+Arabic:wght@600;700&family=Noto+Sans+Arabic:wght@600;700;800&family=Scheherazade+New:wght@700&family=Tajawal:wght@700;800&display=swap');
+
+        :root {
+            --cert-font: 'Traditional Arabic', 'Amiri', 'Noto Naskh Arabic', serif;
+            --logo-w: 112px;
+            --logo-h: 66px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', 'Cairo', Arial, sans-serif;
+            background-color: #cbd5e1;
+            margin: 0;
+            padding: 12px;
+            color: #000000;
+        }
+
+        /* شريط التحكم السريع أعلى الصفحة */
+        .quick-toolbar {
+            max-width: 210mm;
+            margin: 0 auto 12px auto;
+            background: #1e293b;
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12.5px;
+        }
+
+        .font-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .q-btn {
+            background: #334155;
+            color: #fff;
+            border: 1px solid #475569;
+            padding: 6px 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.15s;
+        }
+
+        .q-btn:hover, .q-btn.active {
+            background: #10b981;
+            border-color: #059669;
+            color: #fff;
+        }
+
+        /* ================= شاشة الدخول ================= */
+        #loginOverlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #13392d 0%, #1e5241 100%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        .login-box {
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 14px;
+            width: 380px;
+            max-width: 92%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .login-box img { max-width: 130px; margin-bottom: 10px; }
+        .login-box h2 { margin: 0 0 8px 0; color: #1e5241; font-size: 20px; font-weight: 800; }
+        .login-box p { margin: 0 0 20px 0; color: #666; font-size: 13px; }
+        .login-box input {
+            width: 100%; padding: 11px; border: 2px solid #cbd5e1; border-radius: 8px;
+            font-family: inherit; font-size: 15px; text-align: center; margin-bottom: 15px;
+        }
+        .login-box button {
+            width: 100%; padding: 11px; background: #1e5241; color: #fff; border: none;
+            border-radius: 8px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+        }
+        .login-err { color: #d90429; font-size: 12px; font-weight: 700; margin-top: 10px; display: none; }
+
+        /* ================= لوحة الإدخال ================= */
+        .dashboard {
+            max-width: 210mm;
+            margin: 0 auto 18px auto;
+            background: #ffffff;
+            padding: 18px 22px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 5px solid #1e5241;
+        }
+
+        .dash-title {
+            margin: 0 0 12px 0;
+            color: #1e5241;
+            font-size: 16px;
+            font-weight: 800;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sec-bar {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #1e5241;
+            background: #eff6f3;
+            padding: 6px 10px;
+            border-right: 4px solid #1e5241;
+            margin: 12px 0 8px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+            gap: 8px;
+        }
+
+        .inp-group { display: flex; flex-direction: column; }
+        .inp-group label { font-size: 11px; font-weight: 700; margin-bottom: 3px; color: #1e293b; }
+        .inp-group input, .inp-group select {
+            padding: 6px 9px; border: 1px solid #cbd5e1; border-radius: 6px;
+            font-family: inherit; font-size: 12px; background: #fff; font-weight: 700;
+        }
+
+        /* بطاقات التحكم بالمواد (حذف وترتيب) */
+        .sub-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            padding: 7px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sub-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sub-card-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .sub-ctrl-btns {
+            display: flex;
+            gap: 3px;
+        }
+
+        .mini-btn {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .mini-btn:hover { background: #e2e8f0; }
+        .mini-btn.del { color: #e11d48; border-color: #fecdd3; background: #fff1f2; }
+        .mini-btn.del:hover { background: #ffe4e6; }
+
+        .btns-row {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 9px 16px; border: none; border-radius: 7px; font-family: inherit;
+            font-weight: 700; font-size: 12.5px; cursor: pointer; color: #fff;
+        }
+        .btn-add { background: #1e5241; }
+        .btn-print { background: #0284c7; }
+        .btn-clear { background: #e11d48; margin-right: auto; }
+
+        /* =========================================================================
+           ورقة الشهادة الرسمية (مطابقة 100% بدون أي تغيير)
+        ========================================================================= */
+        .pages-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        .cert-page {
+            width: 210mm;
+            min-width: 210mm;
+            height: 297mm;
+            background: #ffffff;
+            padding: 13mm 15mm 11mm 15mm;
+            margin: 0 auto;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            position: relative;
+            font-family: var(--cert-font);
+            direction: rtl;
+            page-break-after: always;
+            break-after: page;
+            color: #000000;
+        }
+
+        .cert-page:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        /* 1. الترويسة العلوية */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .hdr-right {
+            width: 35%;
+            text-align: center;
+            font-size: 16.5px;
+            font-weight: 700;
+            line-height: 1.55;
+            padding-top: 2px;
+        }
+
+        .rad-badge {
+            display: inline-block;
+            vertical-align: middle;
+            width: 25px;
+            height: 22px;
+            margin: 0 2px;
+            position: relative;
+            top: -3px;
+        }
+
+        .rad-badge svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        .hdr-center {
+            width: 35%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-box {
+            width: var(--logo-w);
+            height: var(--logo-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .hdr-left {
+            width: 30%;
+        }
+
+        /* العناوين الوسطى تحت الشعار */
+        .center-titles {
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 14px;
+        }
+
+        .center-titles .title-ar {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .center-titles .title-en {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            margin-bottom: 8px;
+        }
+
+        .center-titles .grade-ar {
+            font-size: 16.5px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .center-titles .grade-en {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* 2. الجدول الأول (المربع الرمادي) */
+        table.info-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            table-layout: fixed;
+            border: 1.2px solid #000000;
+        }
+
+        table.info-tbl td {
+            border: 1px solid #000000;
+            background-color: #d9d9d9 !important;
+            padding: 2px 6px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 15px;
+            font-weight: 700;
+            height: 24px;
+            line-height: 1.15;
+            white-space: nowrap;
+        }
+
+        .en-txt {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            direction: ltr;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+        }
+
+        /* 3. جدول المواد الدراسية + السلوك والمواظبة */
+        table.marks-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            table-layout: fixed;
+            border: 1.2px solid #000000;
+        }
+
+        table.marks-tbl th, table.marks-tbl td {
+            border: 1px solid #000000;
+            padding: 1px 6px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 15.5px;
+            font-weight: 700;
+            height: 23px;
+            line-height: 1.1;
+        }
+
+        table.marks-tbl th {
+            background-color: #d9d9d9 !important;
+            height: 25px;
+            font-size: 15.5px;
+            font-weight: 700;
+        }
+
+        table.marks-tbl th.en-th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            direction: ltr;
+        }
+
+        .en-sub-cell {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            direction: ltr;
+        }
+
+        .num-cell {
+            font-size: 15px !important;
+            font-weight: 700 !important;
+        }
+
+        .merged-conduct-label {
+            padding: 1px 42px 1px 28px !important;
+        }
+
+        .merged-conduct-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* 4. منطقة التوقيعات والختم */
+        .sigs-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 22px;
+            margin-top: 6px;
+            margin-bottom: 14px;
+        }
+
+        .sig-right-col { width: 35%; text-align: center; }
+        .sig-mid-col { width: 30%; text-align: center; padding-top: 6px; font-size: 16px; font-weight: 700; }
+        .sig-left-col { width: 35%; text-align: center; padding-top: 6px; }
+
+        .sig-block-ar { font-size: 16px; font-weight: 700; line-height: 1.25; }
+        .sig-block-en { font-family: Calibri, Arial, sans-serif; font-size: 12px; font-weight: 700; margin-top: 2px; }
+        .sig-val-name { margin-top: 5px; font-size: 16px; font-weight: 700; min-height: 20px; }
+        .principal-box { margin-top: 12px; }
+
+        /* 5. شرح المستويات في أسفل الورقة */
+        .levels-footer {
+            width: 100%;
+            margin-top: 6px;
+            padding: 0 2px;
+        }
+
+        .levels-head-right {
+            text-align: right;
+            font-size: 15.5px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            direction: rtl;
+        }
+
+        .levels-head-right .und-ar {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .levels-head-right .en-lvl {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            margin-right: 8px;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        .levels-head-right .und-en {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .lvl-item-ar {
+            text-align: right;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1px;
+        }
+
+        .lvl-item-en {
+            text-align: left;
+            direction: ltr;
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 10.5px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .del-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #e11d48;
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        @media print {
+            @page { size: A4 portrait; margin: 0; }
+            body { background: #ffffff; padding: 0; margin: 0; }
+            .no-print, .quick-toolbar, #loginOverlay, .dashboard, .del-btn { display: none !important; }
+            .pages-wrapper { gap: 0; overflow: visible; }
+            .cert-page { box-shadow: none; margin: 0; width: 210mm; height: 297mm; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- شريط التحكم السريع للخط وحجم الشعار -->
+<div class="quick-toolbar no-print">
+    <div class="font-btns">
+        <span>🔤 الخط:</span>
+        <button class="q-btn active" onclick="setFont(this, `'Traditional Arabic', 'Amiri', 'Noto Naskh Arabic', serif`)">1. خط الورقة الأصلي</button>
+        <button class="q-btn" onclick="setFont(this, `'Noto Naskh Arabic', 'Arial', sans-serif`)">2. خط النسخ</button>
+        <button class="q-btn" onclick="setFont(this, `'Noto Sans Arabic', 'Arial', sans-serif`)">3. خط صريح</button>
+    </div>
+    <div class="font-btns">
+        <span>📐 حجم الشعار:</span>
+        <input type="range" min="80" max="170" value="112" oninput="resizeLogo(this.value)" style="width:90px; cursor:pointer;">
+        <button class="q-btn" style="background:#0284c7;" onclick="toggleDash()">📝 إظهار/إخفاء التسجيل</button>
+        <button class="q-btn" style="background:#10b981;" onclick="window.print()">🖨️ حفظ PDF / طباعة</button>
+    </div>
+</div>
+
+<!-- شاشة القفل -->
+<div id="loginOverlay" class="no-print">
+    <div class="login-box">
+        <img class="embedded-logo-img" alt="شعار المدرسة">
+        <h2>مدرسة أم سلمة الخيرية</h2>
+        <p>يرجى إدخال كلمة المرور للدخول للنظام</p>
+        <input type="password" id="passInput" placeholder="كلمة المرور..." onkeypress="if(event.key==='Enter') verifyLogin()">
+        <button onclick="verifyLogin()">دخول</button>
+        <div class="login-err" id="loginErr">كلمة المرور غير صحيحة!</div>
+    </div>
+</div>
+
+<!-- لوحة الإدخال -->
+<div class="dashboard no-print" id="dashPanel">
+    <div class="dash-title">
+        <span>تسجيل بيانات الطالبات (شامل جميع المواد مع إمكانية الحذف والترتيب)</span>
+        <span style="font-size:13px; color:#1e5241;">عدد الشهادات: <b id="stuCounter">1</b></span>
+    </div>
+
+    <div class="sec-bar">
+        <span>1. الشعار وبيانات الصف والإدارة</span>
+    </div>
+    <div class="grid-inputs">
+        <div class="inp-group">
+            <label>📷 رفع ملف الشعار (PDF أو صورة)</label>
+            <input type="file" accept="application/pdf,image/*" onchange="uploadSchoolLogo(event)">
+        </div>
+        <div class="inp-group">
+            <label>عنوان الإشعار</label>
+            <input type="text" id="hdrTitleAr" value="إشعار بدرجات الفصل الدراسي الأول للعام 1448 هـ">
+        </div>
+        <div class="inp-group">
+            <label>الصف الدراسي (عربي)</label>
+            <input type="text" id="hdrGradeAr" value="السادس الابتدائي" oninput="autoTranslateGrade(this.value)">
+        </div>
+        <div class="inp-group">
+            <label>الصف الدراسي (إنجليزي)</label>
+            <input type="text" id="hdrGradeEn" value="The Sixth Primary School" dir="ltr">
+        </div>
+        <div class="inp-group">
+            <label>رائدة الفصل</label>
+            <input type="text" id="hdrCoord" value="سماء كمال حسين سعيد">
+        </div>
+        <div class="inp-group">
+            <label>مديرة المدرسة</label>
+            <input type="text" id="hdrPrincipal" value="فريدة محمد الأحمدي">
+        </div>
+    </div>
+
+    <div class="sec-bar">
+        <span>2. البيانات الأساسية للطالبة (المربع الأول)</span>
+    </div>
+    <div class="grid-inputs">
+        <div class="inp-group">
+            <label>اسم الطالبة (عربي)</label>
+            <input type="text" id="inName" placeholder="أريام نور محمد مولافي">
+        </div>
+        <div class="inp-group">
+            <label>Student Name (إنجليزي)</label>
+            <input type="text" id="inNameEn" placeholder="Aryam Noor Mohammed" dir="ltr">
+        </div>
+        <div class="inp-group">
+            <label>الفصل (Class)</label>
+            <input type="text" id="inClass" value="1">
+        </div>
+        <div class="inp-group">
+            <label>تاريخ الميلاد</label>
+            <input type="text" id="inDob" placeholder="١٤٤٨هـ">
+        </div>
+        <div class="inp-group">
+            <label>الجنسية (عربي)</label>
+            <input type="text" id="inNatAr" value="برماوية">
+        </div>
+        <div class="inp-group">
+            <label>Nationality (إنجليزي)</label>
+            <input type="text" id="inNatEn" value="Burma" dir="ltr">
+        </div>
+        <div class="inp-group">
+            <label>رقم الهوية (Identity No)</label>
+            <input type="text" id="inId" placeholder="2257148607">
+        </div>
+        <div class="inp-group">
+            <label>ولي أمر الطالبة</label>
+            <input type="text" id="inParent" placeholder="نور محمد مولافي">
+        </div>
+    </div>
+
+    <div class="sec-bar">
+        <span>3. المواد الدراسية (<b id="activeSubsCount">11</b> مادة حالياً) — يمكنك حذف أي مادة أو تغيير ترتيبها بالأسهم ⬆️⬇️</span>
+        <div style="display:flex; gap:6px;">
+            <button class="mini-btn" onclick="addCustomSubjectPrompt()" style="background:#1e5241; color:#fff; border:none; padding:4px 10px;">➕ إضافة مادة</button>
+            <button class="mini-btn" onclick="resetDefault11Subjects()" style="background:#0284c7; color:#fff; border:none; padding:4px 10px;">🔄 استعادة الـ 11 مادة الأصلية</button>
+        </div>
+    </div>
+    <div class="grid-inputs" id="subsContainer"></div>
+
+    <div class="grid-inputs" style="margin-top:8px;">
+        <div class="inp-group">
+            <label>السلوك (Conduct)</label>
+            <input type="text" id="inConduct" value="متعاونة">
+        </div>
+        <div class="inp-group">
+            <label>المواظبة (Attendance)</label>
+            <input type="text" id="inAttend" value="مواظبة">
+        </div>
+    </div>
+
+    <div class="btns-row">
+        <button class="btn btn-add" onclick="addStudentRecord()">➕ إضافة الطالبة</button>
+        <button class="btn btn-print" onclick="window.print()">🖨️ تصدير PDF / طباعة</button>
+        <button class="btn btn-clear" onclick="clearAllRecords()">🗑️ مسح الكل</button>
+    </div>
+</div>
+
+<!-- حاوية الشهادات -->
+<div class="pages-wrapper" id="certsWrapper"></div>
+
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    const DEFAULT_LOGO = "data:image/jpeg;base64,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";
+
+    const RADIYALLAHU_ANHA_BADGE = `<span class="rad-badge" title="رضي الله عنها"><svg viewBox="0 0 64 56" xmlns="http://www.w3.org/2000/svg"><text x="32" y="25" font-family="'Amiri', 'Scheherazade New', 'Traditional Arabic', serif" font-size="19" font-weight="bold" fill="#000" text-anchor="middle">رَضِيَ اللّٰهُ</text><text x="32" y="47" font-family="'Amiri', 'Scheherazade New', 'Traditional Arabic', serif" font-size="21" font-weight="bold" fill="#000" text-anchor="middle">عَنْهَا</text></svg></span>`;
+
+    let activeLogo = localStorage.getItem('ums_custom_logo') || DEFAULT_LOGO;
+    document.querySelectorAll('.embedded-logo-img').forEach(img => img.src = activeLogo);
+
+    function setFont(btn, fontName) {
+        document.documentElement.style.setProperty('--cert-font', fontName);
+        document.querySelectorAll('.font-btns .q-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function resizeLogo(val) {
+        document.documentElement.style.setProperty('--logo-w', val + 'px');
+        document.documentElement.style.setProperty('--logo-h', Math.round(val * 0.59) + 'px');
+    }
+
+    function toggleDash() {
+        const d = document.getElementById('dashPanel');
+        d.style.display = d.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toEasternDigits(str) {
+        if (str === null || str === undefined) return '';
+        const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        return String(str).replace(/[0-9]/g, w => eastern[+w]);
+    }
+
+    function toWesternDigits(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
+
+    async function uploadSchoolLogo(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.type === 'application/pdf') {
+            const ab = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+            const page = await pdf.getPage(1);
+            const vp = page.getViewport({ scale: 2.0 });
+            const c = document.createElement('canvas');
+            c.width = vp.width; c.height = vp.height;
+            const ctx = c.getContext('2d');
+            await page.render({ canvasContext: ctx, viewport: vp }).promise;
+
+            const imgData = ctx.getImageData(0, 0, c.width, c.height);
+            const d = imgData.data;
+            let top = c.height, left = c.width, right = 0, bottom = 0;
+            for (let y = 0; y < c.height; y++) {
+                for (let x = 0; x < c.width; x++) {
+                    const i = (y * c.width + x) * 4;
+                    if (d[i] < 245 || d[i+1] < 245 || d[i+2] < 245) {
+                        if (x < left) left = x;
+                        if (x > right) right = x;
+                        if (y < top) top = y;
+                        if (y > bottom) bottom = y;
+                    }
+                }
+            }
+            const pad = 12;
+            left = Math.max(0, left - pad); top = Math.max(0, top - pad);
+            right = Math.min(c.width, right + pad); bottom = Math.min(c.height, bottom + pad);
+            const out = document.createElement('canvas');
+            out.width = 450; out.height = Math.round((bottom - top) * (450 / (right - left)));
+            out.getContext('2d').drawImage(c, left, top, right - left, bottom - top, 0, 0, out.width, out.height);
+            activeLogo = out.toDataURL('image/jpeg', 0.92);
+            localStorage.setItem('ums_custom_logo', activeLogo);
+            renderAllPages();
+        } else {
+            const reader = new FileReader();
+            reader.onload = ev => {
+                activeLogo = ev.target.result;
+                localStorage.setItem('ums_custom_logo', activeLogo);
+                renderAllPages();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // جميع المواد الـ 11 بالترتيب المطابق للصورة المرفقة
+    const MASTER_11_SUBJECTS = [
+        { ar: "القرآن الكريم", en: "The Holy Qur'an", val: "متفوق" },
+        { ar: "التوحيد", en: "Monotheism", val: "متفوق" },
+        { ar: "الفقه", en: "Jurisprudence", val: "متفوق" },
+        { ar: "الحديث", en: "Modern", val: "متفوق" },
+        { ar: "لغتي", en: "Prompt's Traditions", val: "متفوق" },
+        { ar: "الرياضيات", en: "Mathematics", val: "متفوق" },
+        { ar: "العلوم", en: "Science", val: "متفوق" },
+        { ar: "الانجليزي", en: "English", val: "متفوق" },
+        { ar: "الاجتماعية", en: "Social", val: "متفوق" },
+        { ar: "التربية الأسرية", en: "Family Life Education", val: "متفوق" },
+        { ar: "التربية الفنية", en: "Art education", val: "متفوق" }
+    ];
+
+    let currentSubjects = JSON.parse(localStorage.getItem('ums_active_subs_v11') || 'null');
+    if (!currentSubjects || !currentSubjects.length) {
+        currentSubjects = JSON.parse(JSON.stringify(MASTER_11_SUBJECTS));
+    }
+
+    function saveCurrentSubjectsState() {
+        localStorage.setItem('ums_active_subs_v11', JSON.stringify(currentSubjects));
+    }
+
+    function buildSubjectsInputs() {
+        const subsContainer = document.getElementById('subsContainer');
+        document.getElementById('activeSubsCount').innerText = currentSubjects.length;
+        subsContainer.innerHTML = '';
+        currentSubjects.forEach((s, idx) => {
+            const gVal = s.val !== undefined ? s.val : 'متفوق';
+            subsContainer.innerHTML += `
+                <div class="sub-card">
+                    <div class="sub-card-head">
+                        <span class="sub-card-title">${toEasternDigits(idx + 1)}. ${s.ar}</span>
+                        <div class="sub-ctrl-btns">
+                            <button type="button" class="mini-btn" title="تحريك للأعلى" onclick="moveSubject(${idx}, -1)">⬆️</button>
+                            <button type="button" class="mini-btn" title="تحريك للأسفل" onclick="moveSubject(${idx}, 1)">⬇️</button>
+                            <button type="button" class="mini-btn del" title="حذف هذه المادة" onclick="deleteSubject(${idx})">🗑️ حذف</button>
+                        </div>
+                    </div>
+                    <select id="grade_${idx}" onchange="updateSubjectGrade(${idx}, this.value)">
+                        <option value="متفوق" ${gVal==='متفوق'?'selected':''}>متفوق</option>
+                        <option value="متقدم" ${gVal==='متقدم'?'selected':''}>متقدم</option>
+                        <option value="متمكن" ${gVal==='متمكن'?'selected':''}>متمكن</option>
+                        <option value="غير مجتاز" ${gVal==='غير مجتاز'?'selected':''}>غير مجتاز</option>
+                        <option value="" ${gVal===''?'selected':''}>(فارغ)</option>
+                    </select>
+                </div>
+            `;
+        });
+    }
+
+    function updateSubjectGrade(idx, newVal) {
+        currentSubjects[idx].val = newVal;
+        saveCurrentSubjectsState();
+        syncSubjectsToDisplayedRecords();
+    }
+
+    function moveSubject(idx, dir) {
+        const target = idx + dir;
+        if (target < 0 || target >= currentSubjects.length) return;
+        const temp = currentSubjects[idx];
+        currentSubjects[idx] = currentSubjects[target];
+        currentSubjects[target] = temp;
+        saveCurrentSubjectsState();
+        buildSubjectsInputs();
+        syncSubjectsToDisplayedRecords();
+    }
+
+    function deleteSubject(idx) {
+        if (currentSubjects.length <= 1) {
+            alert('يجب بقاء مادة واحدة على الأقل في الجدول.');
+            return;
+        }
+        currentSubjects.splice(idx, 1);
+        saveCurrentSubjectsState();
+        buildSubjectsInputs();
+        syncSubjectsToDisplayedRecords();
+    }
+
+    function resetDefault11Subjects() {
+        currentSubjects = JSON.parse(JSON.stringify(MASTER_11_SUBJECTS));
+        saveCurrentSubjectsState();
+        buildSubjectsInputs();
+        syncSubjectsToDisplayedRecords();
+    }
+
+    function addCustomSubjectPrompt() {
+        const ar = prompt('أدخل اسم المادة بالعربي (مثال: المهارات الرقمية):');
+        if (!ar || !ar.trim()) return;
+        const en = prompt('أدخل اسم المادة بالإنجليزي (اختياري):', '') || '';
+        currentSubjects.push({ ar: ar.trim(), en: en.trim(), val: 'متفوق' });
+        saveCurrentSubjectsState();
+        buildSubjectsInputs();
+        syncSubjectsToDisplayedRecords();
+    }
+
+    // تحديث المواد وترتيبها مباشرة في الشهادات المعروضة حالياً على الشاشة
+    function syncSubjectsToDisplayedRecords() {
+        records.forEach(r => {
+            const oldGradesMap = {};
+            (r.subjects || []).forEach(oldSub => {
+                oldGradesMap[oldSub.ar] = oldSub.val;
+            });
+            r.subjects = currentSubjects.map(s => ({
+                ar: s.ar,
+                en: s.en,
+                val: oldGradesMap[s.ar] !== undefined ? oldGradesMap[s.ar] : (s.val !== undefined ? s.val : 'متفوق')
+            }));
+        });
+        localStorage.setItem('ums_clean_v11_records', JSON.stringify(records));
+        renderAllPages();
+    }
+
+    buildSubjectsInputs();
+
+    const sampleStudent = {
+        id: 1,
+        titleAr: "إشعار بدرجات الفصل الدراسي الأول للعام 1448 هـ",
+        gradeAr: "السادس الابتدائي",
+        gradeEn: "The Sixth Primary School",
+        coord: "سماء كمال حسين سعيد",
+        principal: "فريدة محمد الأحمدي",
+        name: "أريام نور محمد مولافي",
+        nameEn: "Aryam Noor Mohammed",
+        cls: "1",
+        dob: "١٤٤٨هـ",
+        natAr: "برماوية",
+        natEn: "Burma",
+        idNo: "2257148607",
+        parentName: "نور محمد مولافي",
+        conduct: "متعاونة",
+        attend: "مواظبة",
+        subjects: JSON.parse(JSON.stringify(currentSubjects))
+    };
+
+    let records = JSON.parse(localStorage.getItem('ums_clean_v11_records') || 'null');
+    if (!records || !records.length) {
+        records = [sampleStudent];
+    }
+
+    function autoTranslateGrade(val) {
+        const v = val.trim();
+        const dict = {
+            'الأول ابتدائي': 'The First Year Primary',
+            'الأول الابتدائي': 'The First Primary School',
+            'الثاني ابتدائي': 'The Second Year Primary',
+            'الثاني الابتدائي': 'The Second Primary School',
+            'الثالث ابتدائي': 'The Third Year Primary',
+            'الثالث الابتدائي': 'The Third Primary School',
+            'الرابع ابتدائي': 'The Fourth Year Primary',
+            'الرابع الابتدائي': 'The Fourth Primary School',
+            'الخامس ابتدائي': 'The Fifth Primary School',
+            'الخامس الابتدائي': 'The Fifth Primary School',
+            'السادس ابتدائي': 'The Sixth Primary School',
+            'السادس الابتدائي': 'The Sixth Primary School',
+            'الصف السادس الإبتدائي': 'Sixth grade'
+        };
+        if (dict[v]) document.getElementById('hdrGradeEn').value = dict[v];
+    }
+
+    function addStudentRecord() {
+        const name = document.getElementById('inName').value.trim();
+        if (!name) {
+            alert('يرجى إدخال اسم الطالبة أولاً.');
+            document.getElementById('inName').focus();
+            return;
+        }
+
+        const rec = {
+            id: Date.now(),
+            titleAr: document.getElementById('hdrTitleAr').value,
+            gradeAr: document.getElementById('hdrGradeAr').value,
+            gradeEn: document.getElementById('hdrGradeEn').value,
+            coord: document.getElementById('hdrCoord').value,
+            principal: document.getElementById('hdrPrincipal').value,
+            name: name,
+            nameEn: document.getElementById('inNameEn').value.trim(),
+            cls: document.getElementById('inClass').value,
+            dob: document.getElementById('inDob').value.trim(),
+            natAr: document.getElementById('inNatAr').value,
+            natEn: document.getElementById('inNatEn').value,
+            idNo: document.getElementById('inId').value.trim(),
+            parentName: document.getElementById('inParent').value.trim(),
+            conduct: document.getElementById('inConduct').value,
+            attend: document.getElementById('inAttend').value,
+            subjects: currentSubjects.map((s, i) => ({
+                ar: s.ar,
+                en: s.en,
+                val: document.getElementById('grade_' + i).value
+            }))
+        };
+
+        records.push(rec);
+        localStorage.setItem('ums_clean_v11_records', JSON.stringify(records));
+        renderAllPages();
+
+        document.getElementById('inName').value = '';
+        document.getElementById('inNameEn').value = '';
+        document.getElementById('inDob').value = '';
+        document.getElementById('inId').value = '';
+        document.getElementById('inParent').value = '';
+    }
+
+    function removeRecord(id) {
+        records = records.filter(r => r.id !== id);
+        localStorage.setItem('ums_clean_v11_records', JSON.stringify(records));
+        renderAllPages();
+    }
+
+    function clearAllRecords() {
+        if (confirm('هل أنت متأكد من مسح جميع الشهادات؟')) {
+            records = [];
+            localStorage.setItem('ums_clean_v11_records', '[]');
+            renderAllPages();
+        }
+    }
+
+    function renderAllPages() {
+        document.getElementById('stuCounter').innerText = records.length;
+        const wrapper = document.getElementById('certsWrapper');
+        wrapper.innerHTML = '';
+
+        records.forEach(r => {
+            let subjectRows = '';
+            const subsList = r.subjects || [];
+            subsList.forEach((sub, idx) => {
+                subjectRows += `
+                    <tr>
+                        <td class="num-cell" contenteditable="true">${toEasternDigits(idx + 1)}</td>
+                        <td contenteditable="true">${sub.ar}</td>
+                        <td contenteditable="true">${sub.val}</td>
+                        <td class="en-sub-cell" contenteditable="true">${sub.en}</td>
+                    </tr>
+                `;
+            });
+
+            const dobAr = r.dob ? toEasternDigits(r.dob) : '';
+            const dobEn = r.dob ? toWesternDigits(r.dob.replace(/هـ/g, '').trim()) : '';
+
+            const page = document.createElement('div');
+            page.className = 'cert-page';
+            page.innerHTML = `
+                <button class="del-btn no-print" onclick="removeRecord(${r.id})">حذف الشهادة ✕</button>
+
+                <!-- 1. الترويسة العلوية مع رمز (رضي الله عنها) وحجم الشعار الأصلي -->
+                <div class="top-header">
+                    <div class="hdr-right" contenteditable="true">
+                        المملكة العربية السعودية<br>
+                        مدرسة أم سلمة ${RADIYALLAHU_ANHA_BADGE} الخيرية<br>
+                        لتعليم القرآن والسنة المطهرة
+                    </div>
+                    <div class="hdr-center">
+                        <div class="logo-box">
+                            <img src="${activeLogo}" alt="شعار مدرسة أم سلمة الخيرية">
+                        </div>
+                    </div>
+                    <div class="hdr-left"></div>
+                </div>
+
+                <!-- العناوين الوسطى تحت الشعار -->
+                <div class="center-titles" contenteditable="true">
+                    <div class="title-ar">${r.titleAr}</div>
+                    <div class="title-en">A NOTIFHCATION OF THE FIRST SEMESTER DEGREE</div>
+                    <div class="grade-ar">${r.gradeAr}</div>
+                    <div class="grade-en">${r.gradeEn}</div>
+                </div>
+
+                <!-- 2. الجدول الأول (مسافات متسعة في Burma و Nationality) -->
+                <table class="info-tbl">
+                    <colgroup>
+                        <col style="width: 11.5%;">
+                        <col style="width: 12.0%;">
+                        <col style="width: 7.5%;">
+                        <col style="width: 8.5%;">
+                        <col style="width: 9.5%;">
+                        <col style="width: 13.0%;">
+                        <col style="width: 25.0%;">
+                        <col style="width: 13.0%;">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" style="text-align:right; padding-right:8px;" contenteditable="true">
+                                <span>اسم الطالبة:</span>
+                                <span style="margin-right:3px;">${r.name}</span>
+                            </td>
+                            <td contenteditable="true">الفصل:</td>
+                            <td class="en-txt" contenteditable="true">${r.cls}</td>
+                            <td class="en-txt" contenteditable="true">Class:</td>
+                            <td colspan="2" class="en-txt" style="text-align:left; padding-left:8px;" contenteditable="true">
+                                <span>Student Name: </span><span>${r.nameEn || ''}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">تاريخ الميلاد</td>
+                            <td contenteditable="true">${dobAr}</td>
+                            <td contenteditable="true">الجنسية</td>
+                            <td contenteditable="true">${r.natAr}</td>
+                            <td class="en-txt" style="text-align:center;" contenteditable="true">${r.natEn}</td>
+                            <td class="en-txt" style="text-align:center;" contenteditable="true">Nationality</td>
+                            <td class="en-txt" style="text-align:center;" contenteditable="true">${dobEn}</td>
+                            <td class="en-txt" style="text-align:center;" contenteditable="true">Date of Birth</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" contenteditable="true">رقم الهوية</td>
+                            <td colspan="4" class="en-txt" style="font-size:13px; text-align:center;" contenteditable="true">${r.idNo}</td>
+                            <td colspan="2" class="en-txt" style="text-align:center;" contenteditable="true">Identity No</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- 3. جدول المواد الدراسية + السلوك والمواظبة المدموجة -->
+                <table class="marks-tbl">
+                    <colgroup>
+                        <col style="width: 11.5%;">
+                        <col style="width: 29.5%;">
+                        <col style="width: 29.0%;">
+                        <col style="width: 30.0%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>المواد الدراسية</th>
+                            <th>مستوى الطالبة</th>
+                            <th class="en-th">Subject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${subjectRows}
+                        <tr>
+                            <td colspan="2" class="merged-conduct-label" contenteditable="true">
+                                <div class="merged-conduct-flex">
+                                    <span>السلوك</span>
+                                    <span class="en-txt">Conduct</span>
+                                </div>
+                            </td>
+                            <td colspan="2" contenteditable="true">${r.conduct}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="merged-conduct-label" contenteditable="true">
+                                <div class="merged-conduct-flex">
+                                    <span>المواظبة</span>
+                                    <span class="en-txt">Attendance</span>
+                                </div>
+                            </td>
+                            <td colspan="2" contenteditable="true">${r.attend}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- 4. التوقيعات والختم -->
+                <div class="sigs-section" contenteditable="true">
+                    <div class="sig-right-col">
+                        <div class="sig-block-ar">رائدة الفصل</div>
+                        <div class="sig-block-en">The Class coordinator</div>
+                        <div class="sig-val-name">${r.coord}</div>
+
+                        <div class="principal-box">
+                            <div class="sig-block-ar">مديرة المدرسة</div>
+                            <div class="sig-block-en">The School principal</div>
+                            <div class="sig-val-name">${r.principal}</div>
+                        </div>
+                    </div>
+
+                    <div class="sig-mid-col">
+                        الختم
+                    </div>
+
+                    <div class="sig-left-col">
+                        <div class="sig-block-ar">ولي أمر الطالبة</div>
+                        <div class="sig-block-en">The student parent</div>
+                        <div class="sig-val-name" style="margin-top:8px;">${r.parentName || ''}</div>
+                    </div>
+                </div>
+
+                <!-- 5. شرح المستويات في أسفل الصفحة -->
+                <div class="levels-footer" contenteditable="true">
+                    <div class="levels-head-right">
+                        <span class="und-ar">مستـوى الطالبة</span>
+                        <span class="en-lvl">Student's <span class="und-en">Level</span> :</span>
+                    </div>
+
+                    <div class="lvl-item-ar">المستوى (متفوق): يعني أن الطالبة قد أتقنت جميع العلوم والمعارف والمهارات المقررة في المادة الدراسية.</div>
+                    <div class="lvl-item-en">The level (superior): it realizes that the student has mastered all the sciences, knowledge and skills stipulated in the subject.</div>
+
+                    <div class="lvl-item-ar">المستوى (متقدم): يعني أن الطالبة قد أتقنت 66% أو أكثر من العلوم والمعارف والمهارات المقررة، بما في ذلك علوم ومعارف ومهارات الحد الأدنى</div>
+                    <div class="lvl-item-en">Level (advanced): means A, the student has mastered 66% or more of the required sciences, knowledge and skills, including minimum sciences,<br>knowledge and skills</div>
+
+                    <div class="lvl-item-ar">المستوى (متمكن): يعني أن الطالبة قد أتقنت على الأقل الحد الأدنى من العلوم والمعارف والمهارات المقررة.</div>
+                    <div class="lvl-item-en">Level (proficient): means that the student has mastered, at least, the minimum set of sciences, knowledge and skills.</div>
+
+                    <div class="lvl-item-ar">المستوى (غير مجتاز): يعني أن الطالبة لم يتقن معرفة أو مهارة أو أكثر من علوم ومعارف ومهارات الحد الأدنى المقررة.</div>
+                    <div class="lvl-item-en">Level (not passed): means that the student has not mastered one or more knowledge or skills in the minimum established sciences, knowledge and<br>skills.</div>
+                </div>
+            `;
+            wrapper.appendChild(page);
+        });
+    }
+
+    renderAllPages();
+</script>
+</body>
+</html>
