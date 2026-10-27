@@ -220,7 +220,7 @@
         .btn-clear { background: #e11d48; margin-right: auto; }
 
         /* =========================================================================
-           ورقة الشهادة الرسمية (مطابقة 100% بدون أي تغيير)
+           ورقة الشهادة الرسمية (مطابقة 100% مع حل الأسماء الطويلة تلقائياً)
         ========================================================================= */
         .pages-wrapper {
             display: flex;
@@ -346,7 +346,7 @@
             font-weight: 700;
         }
 
-        /* 2. الجدول الأول (المربع الرمادي) */
+        /* 2. الجدول الأول (المربع الرمادي مع ضبط الأسماء الطويلة تلقائياً) */
         table.info-tbl {
             width: 100%;
             border-collapse: collapse;
@@ -358,23 +358,32 @@
         table.info-tbl td {
             border: 1px solid #000000;
             background-color: #d9d9d9 !important;
-            padding: 2px 6px;
+            padding: 2px 5px;
             text-align: center;
             vertical-align: middle;
             font-size: 15px;
             font-weight: 700;
-            height: 24px;
+            height: 25px;
             line-height: 1.15;
             white-space: nowrap;
+            overflow: hidden;
         }
 
         .en-txt {
             font-family: Calibri, Arial, sans-serif;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             direction: ltr;
-            padding-left: 6px !important;
-            padding-right: 6px !important;
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        /* حاوية الاسم الذكية التي تتقلص تلقائياً إذا كان الاسم طويلاً */
+        .name-fit-wrap {
+            display: inline-block;
+            white-space: nowrap;
+            max-width: 100%;
+            vertical-align: middle;
         }
 
         /* 3. جدول المواد الدراسية + السلوك والمواظبة */
@@ -561,7 +570,7 @@
 <!-- لوحة الإدخال -->
 <div class="dashboard no-print" id="dashPanel">
     <div class="dash-title">
-        <span>تسجيل بيانات الطالبات (شامل جميع المواد مع إمكانية الحذف والترتيب)</span>
+        <span>تسجيل بيانات الطالبات (مع الضبط التلقائي للأسماء الطويلة)</span>
         <span style="font-size:13px; color:#1e5241;">عدد الشهادات: <b id="stuCounter">1</b></span>
     </div>
 
@@ -579,15 +588,15 @@
         </div>
         <div class="inp-group">
             <label>الصف الدراسي (عربي)</label>
-            <input type="text" id="hdrGradeAr" value="السادس الابتدائي" oninput="autoTranslateGrade(this.value)">
+            <input type="text" id="hdrGradeAr" value="الخامس الابتدائي" oninput="autoTranslateGrade(this.value)">
         </div>
         <div class="inp-group">
             <label>الصف الدراسي (إنجليزي)</label>
-            <input type="text" id="hdrGradeEn" value="The Sixth Primary School" dir="ltr">
+            <input type="text" id="hdrGradeEn" value="The Fifth Primary School" dir="ltr">
         </div>
         <div class="inp-group">
             <label>رائدة الفصل</label>
-            <input type="text" id="hdrCoord" value="سماء كمال حسين سعيد">
+            <input type="text" id="hdrCoord" value="أفنان زكريا عبد المعبود">
         </div>
         <div class="inp-group">
             <label>مديرة المدرسة</label>
@@ -596,16 +605,16 @@
     </div>
 
     <div class="sec-bar">
-        <span>2. البيانات الأساسية للطالبة (المربع الأول)</span>
+        <span>2. البيانات الأساسية للطالبة (يتكيف حجم الخط تلقائياً مهما كان الاسم طويلاً)</span>
     </div>
     <div class="grid-inputs">
         <div class="inp-group">
             <label>اسم الطالبة (عربي)</label>
-            <input type="text" id="inName" placeholder="أريام نور محمد مولافي">
+            <input type="text" id="inName" placeholder="ميعاد جابر نور عالم">
         </div>
         <div class="inp-group">
             <label>Student Name (إنجليزي)</label>
-            <input type="text" id="inNameEn" placeholder="Aryam Noor Mohammed" dir="ltr">
+            <input type="text" id="inNameEn" placeholder="Meead jaber nooralam" dir="ltr">
         </div>
         <div class="inp-group">
             <label>الفصل (Class)</label>
@@ -613,7 +622,7 @@
         </div>
         <div class="inp-group">
             <label>تاريخ الميلاد</label>
-            <input type="text" id="inDob" placeholder="١٤٤٨هـ">
+            <input type="text" id="inDob" placeholder="1437">
         </div>
         <div class="inp-group">
             <label>الجنسية (عربي)</label>
@@ -629,15 +638,16 @@
         </div>
         <div class="inp-group">
             <label>ولي أمر الطالبة</label>
-            <input type="text" id="inParent" placeholder="نور محمد مولافي">
+            <input type="text" id="inParent" placeholder="جابر نور عالم">
         </div>
     </div>
 
     <div class="sec-bar">
-        <span>3. المواد الدراسية (<b id="activeSubsCount">11</b> مادة حالياً) — يمكنك حذف أي مادة أو تغيير ترتيبها بالأسهم ⬆️⬇️</span>
-        <div style="display:flex; gap:6px;">
+        <span>3. المواد الدراسية (<b id="activeSubsCount">9</b> مواد حالياً) — يمكنك الحذف 🗑️ أو الترتيب بالأسهم ⬆️⬇️</span>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="mini-btn" onclick="setPreset9Subjects()" style="background:#059669; color:#fff; border:none; padding:4px 10px;">✅ تفعيل الـ 9 مواد</button>
+            <button class="mini-btn" onclick="resetDefault11Subjects()" style="background:#0284c7; color:#fff; border:none; padding:4px 10px;">🔄 تفعيل الـ 11 مادة كاملة</button>
             <button class="mini-btn" onclick="addCustomSubjectPrompt()" style="background:#1e5241; color:#fff; border:none; padding:4px 10px;">➕ إضافة مادة</button>
-            <button class="mini-btn" onclick="resetDefault11Subjects()" style="background:#0284c7; color:#fff; border:none; padding:4px 10px;">🔄 استعادة الـ 11 مادة الأصلية</button>
         </div>
     </div>
     <div class="grid-inputs" id="subsContainer"></div>
@@ -677,6 +687,7 @@
         document.documentElement.style.setProperty('--cert-font', fontName);
         document.querySelectorAll('.font-btns .q-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        setTimeout(fitAllNameCells, 50);
     }
 
     function resizeLogo(val) {
@@ -698,6 +709,34 @@
     function toWesternDigits(str) {
         if (str === null || str === undefined) return '';
         return String(str).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
+
+    // دالة التحجيم التلقائي الذكي للأسماء الطويلة حتى لا تلتصق أو تُقتطع أبداً
+    function fitSingleCell(td) {
+        const wrap = td.querySelector('.name-fit-wrap');
+        if (!wrap) return;
+        const isEn = td.classList.contains('en-txt');
+        let fontSize = isEn ? 11.5 : 15;
+        const minSize = 7.5;
+        wrap.style.fontSize = fontSize + 'px';
+
+        const maxAllowedWidth = td.clientWidth - 12;
+        if (maxAllowedWidth <= 0) return;
+
+        while (wrap.scrollWidth > maxAllowedWidth && fontSize > minSize) {
+            fontSize -= 0.4;
+            wrap.style.fontSize = fontSize.toFixed(1) + 'px';
+        }
+    }
+
+    function fitAllNameCells() {
+        document.querySelectorAll('.auto-fit-td').forEach(td => fitSingleCell(td));
+    }
+
+    window.addEventListener('resize', fitAllNameCells);
+    window.addEventListener('beforeprint', fitAllNameCells);
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitAllNameCells);
     }
 
     async function uploadSchoolLogo(e) {
@@ -747,7 +786,7 @@
         }
     }
 
-    // جميع المواد الـ 11 بالترتيب المطابق للصورة المرفقة
+    // قائمة الـ 11 مادة الكاملة
     const MASTER_11_SUBJECTS = [
         { ar: "القرآن الكريم", en: "The Holy Qur'an", val: "متفوق" },
         { ar: "التوحيد", en: "Monotheism", val: "متفوق" },
@@ -762,13 +801,26 @@
         { ar: "التربية الفنية", en: "Art education", val: "متفوق" }
     ];
 
-    let currentSubjects = JSON.parse(localStorage.getItem('ums_active_subs_v11') || 'null');
+    // قائمة الـ 9 مواد المعتمدة في الصورة
+    const PRESET_9_SUBJECTS = [
+        { ar: "القرآن الكريم", en: "The Holy Qur'an", val: "متفوق" },
+        { ar: "التوحيد", en: "Monotheism", val: "متفوق" },
+        { ar: "الفقه", en: "Jurisprudence", val: "متفوق" },
+        { ar: "لغتي", en: "Prompt's Traditions", val: "متفوق" },
+        { ar: "الرياضيات", en: "Mathematics", val: "متفوق" },
+        { ar: "العلوم", en: "Science", val: "متفوق" },
+        { ar: "انجليزي", en: "English", val: "متفوق" },
+        { ar: "التربية الأسرية", en: "Family Life Education", val: "متفوق" },
+        { ar: "التربية الفنية", en: "Art education", val: "متفوق" }
+    ];
+
+    let currentSubjects = JSON.parse(localStorage.getItem('ums_active_subs_v12') || 'null');
     if (!currentSubjects || !currentSubjects.length) {
-        currentSubjects = JSON.parse(JSON.stringify(MASTER_11_SUBJECTS));
+        currentSubjects = JSON.parse(JSON.stringify(PRESET_9_SUBJECTS));
     }
 
     function saveCurrentSubjectsState() {
-        localStorage.setItem('ums_active_subs_v11', JSON.stringify(currentSubjects));
+        localStorage.setItem('ums_active_subs_v12', JSON.stringify(currentSubjects));
     }
 
     function buildSubjectsInputs() {
@@ -827,6 +879,13 @@
         syncSubjectsToDisplayedRecords();
     }
 
+    function setPreset9Subjects() {
+        currentSubjects = JSON.parse(JSON.stringify(PRESET_9_SUBJECTS));
+        saveCurrentSubjectsState();
+        buildSubjectsInputs();
+        syncSubjectsToDisplayedRecords();
+    }
+
     function resetDefault11Subjects() {
         currentSubjects = JSON.parse(JSON.stringify(MASTER_11_SUBJECTS));
         saveCurrentSubjectsState();
@@ -844,7 +903,6 @@
         syncSubjectsToDisplayedRecords();
     }
 
-    // تحديث المواد وترتيبها مباشرة في الشهادات المعروضة حالياً على الشاشة
     function syncSubjectsToDisplayedRecords() {
         records.forEach(r => {
             const oldGradesMap = {};
@@ -857,7 +915,7 @@
                 val: oldGradesMap[s.ar] !== undefined ? oldGradesMap[s.ar] : (s.val !== undefined ? s.val : 'متفوق')
             }));
         });
-        localStorage.setItem('ums_clean_v11_records', JSON.stringify(records));
+        localStorage.setItem('ums_clean_v12_records', JSON.stringify(records));
         renderAllPages();
     }
 
@@ -866,24 +924,24 @@
     const sampleStudent = {
         id: 1,
         titleAr: "إشعار بدرجات الفصل الدراسي الأول للعام 1448 هـ",
-        gradeAr: "السادس الابتدائي",
-        gradeEn: "The Sixth Primary School",
-        coord: "سماء كمال حسين سعيد",
+        gradeAr: "الخامس الابتدائي",
+        gradeEn: "The Fifth Primary School",
+        coord: "أفنان زكريا عبد المعبود",
         principal: "فريدة محمد الأحمدي",
-        name: "أريام نور محمد مولافي",
-        nameEn: "Aryam Noor Mohammed",
+        name: "ميعاد جابر نور عالم",
+        nameEn: "Meead jaber nooralam",
         cls: "1",
-        dob: "١٤٤٨هـ",
+        dob: "1437",
         natAr: "برماوية",
         natEn: "Burma",
         idNo: "2257148607",
-        parentName: "نور محمد مولافي",
+        parentName: "جابر نور عالم",
         conduct: "متعاونة",
         attend: "مواظبة",
         subjects: JSON.parse(JSON.stringify(currentSubjects))
     };
 
-    let records = JSON.parse(localStorage.getItem('ums_clean_v11_records') || 'null');
+    let records = JSON.parse(localStorage.getItem('ums_clean_v12_records') || 'null');
     if (!records || !records.length) {
         records = [sampleStudent];
     }
@@ -941,7 +999,7 @@
         };
 
         records.push(rec);
-        localStorage.setItem('ums_clean_v11_records', JSON.stringify(records));
+        localStorage.setItem('ums_clean_v12_records', JSON.stringify(records));
         renderAllPages();
 
         document.getElementById('inName').value = '';
@@ -953,14 +1011,14 @@
 
     function removeRecord(id) {
         records = records.filter(r => r.id !== id);
-        localStorage.setItem('ums_clean_v11_records', JSON.stringify(records));
+        localStorage.setItem('ums_clean_v12_records', JSON.stringify(records));
         renderAllPages();
     }
 
     function clearAllRecords() {
         if (confirm('هل أنت متأكد من مسح جميع الشهادات؟')) {
             records = [];
-            localStorage.setItem('ums_clean_v11_records', '[]');
+            localStorage.setItem('ums_clean_v12_records', '[]');
             renderAllPages();
         }
     }
@@ -1015,29 +1073,28 @@
                     <div class="grade-en">${r.gradeEn}</div>
                 </div>
 
-                <!-- 2. الجدول الأول (مسافات متسعة في Burma و Nationality) -->
+                <!-- 2. الجدول الأول (مع التحجيم التلقائي الذكي للأسماء الطويلة) -->
                 <table class="info-tbl">
                     <colgroup>
-                        <col style="width: 11.5%;">
-                        <col style="width: 12.0%;">
-                        <col style="width: 7.5%;">
-                        <col style="width: 8.5%;">
-                        <col style="width: 9.5%;">
+                        <col style="width: 11.0%;">
                         <col style="width: 13.0%;">
-                        <col style="width: 25.0%;">
+                        <col style="width: 7.5%;">
+                        <col style="width: 8.0%;">
+                        <col style="width: 8.5%;">
+                        <col style="width: 11.5%;">
+                        <col style="width: 27.5%;">
                         <col style="width: 13.0%;">
                     </colgroup>
                     <tbody>
                         <tr>
-                            <td colspan="3" style="text-align:right; padding-right:8px;" contenteditable="true">
-                                <span>اسم الطالبة:</span>
-                                <span style="margin-right:3px;">${r.name}</span>
+                            <td colspan="3" class="auto-fit-td" style="text-align:right; padding-right:6px;" contenteditable="true" oninput="fitSingleCell(this)">
+                                <div class="name-fit-wrap"><span>اسم الطالبة: </span><span>${r.name}</span></div>
                             </td>
                             <td contenteditable="true">الفصل:</td>
                             <td class="en-txt" contenteditable="true">${r.cls}</td>
                             <td class="en-txt" contenteditable="true">Class:</td>
-                            <td colspan="2" class="en-txt" style="text-align:left; padding-left:8px;" contenteditable="true">
-                                <span>Student Name: </span><span>${r.nameEn || ''}</span>
+                            <td colspan="2" class="en-txt auto-fit-td" style="text-align:left; padding-left:6px;" contenteditable="true" oninput="fitSingleCell(this)">
+                                <div class="name-fit-wrap"><span>Student Name: </span><span>${r.nameEn || ''}</span></div>
                             </td>
                         </tr>
                         <tr>
@@ -1138,12 +1195,14 @@
                     <div class="lvl-item-ar">المستوى (متمكن): يعني أن الطالبة قد أتقنت على الأقل الحد الأدنى من العلوم والمعارف والمهارات المقررة.</div>
                     <div class="lvl-item-en">Level (proficient): means that the student has mastered, at least, the minimum set of sciences, knowledge and skills.</div>
 
-                    <div class="lvl-item-ar">المستوى (غير مجتاز): يعني أن الطالبة لم يتقن معرفة أو مهارة أو أكثر من علوم ومعارف ومهارات الحد الأدنى المقررة.</div>
+                    <div class="lvl-item-ar">المستوى (غير مجتاز): يعني أن الطالبة لم تتقن معرفة أو مهارة أو أكثر من علوم ومعارف ومهارات الحد الأدنى المقررة.</div>
                     <div class="lvl-item-en">Level (not passed): means that the student has not mastered one or more knowledge or skills in the minimum established sciences, knowledge and<br>skills.</div>
                 </div>
             `;
             wrapper.appendChild(page);
         });
+
+        setTimeout(fitAllNameCells, 20);
     }
 
     renderAllPages();
