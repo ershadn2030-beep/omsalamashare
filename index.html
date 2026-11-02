@@ -1311,16 +1311,8 @@
         syncLiveInterToCurrentRecord();
     }
 
-    function syncLiveInterToCurrentRecord() {
-        if (!interRecords.length) return;
-        const lastRec = interRecords[interRecords.length - 1];
-        lastRec.subjects = JSON.parse(JSON.stringify(interSubjects));
-        lastRec.attendScore = parseFloat(document.getElementById('inInterAttend').value) || 0;
-        lastRec.conductScore = parseFloat(document.getElementById('inInterConduct').value) || 0;
-        lastRec.ranking = document.getElementById('inInterRank').value;
-        lastRec.overallGradeOverride = document.getElementById('inInterOverallGradeOverride').value.trim();
-        localStorage.setItem('ums_inter_records_u2', JSON.stringify(interRecords));
-        renderAllPages();
+function updatePrimSubjectGrade {
+        // إيقاف التعديل التلقائي على الطالبة السابقة لتبقى كل طالبة بدرجاتها المستقلة
     }
 
     function moveSubject(idx, dir) {
